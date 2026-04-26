@@ -1,0 +1,74 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+model User {
+  id            String    @id @default(cuid())
+  name          String
+  email         String    @unique
+  password      String?
+  image         String?
+  role          String    @default("MEMBER")
+  projects      ProjectMember[]
+  assignedTasks Task[]    @relation("AssignedTo")
+  createdTasks  Task[]    @relation("CreatedBy")
+  createdAt     DateTime  @default(now())
+}
+
+model Project {
+  id          String    @id @default(cuid())
+  name        String
+  description String?
+  color       String    @default("#3b82f6")
+  members     ProjectMember[]
+  tasks       Task[]
+  sprints     Sprint[]
+  createdAt   DateTime  @default(now())
+}
+
+model Task {
+  id          String    @id @default(cuid())
+  title       String
+  description String?
+  status      String    @default("TODO")
+  priority    String    @default("MEDIUM")
+  order       Int       @default(0)
+  projectId   String
+  project     Project   @relation(fields: [projectId], references: [id])
+  assigneeId  String?
+  assignee    User?     @relation("AssignedTo", fields: [assigneeId], references: [id])
+  createdById String
+  createdBy   User      @relation("CreatedBy", fields: [createdById], references: [id])
+  sprintId    String?
+  sprint      Sprint?   @relation(fields: [sprintId], references: [id])
+  labels      String    @default("")
+  dueDate     DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+model Sprint {
+  id        String    @id @default(cuid())
+  name      String
+  goal      String?
+  startDate DateTime
+  endDate   DateTime
+  status    String    @default("PLANNED")
+  projectId String
+  project   Project   @relation(fields: [projectId], references: [id])
+  tasks     Task[]
+}
+
+model ProjectMember {
+  userId    String
+  projectId String
+  role      String    @default("DEVELOPER")
+  user      User      @relation(fields: [userId], references: [id])
+  project   Project   @relation(fields: [projectId], references: [id])
+  @@id([userId, projectId])
+}
