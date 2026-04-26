@@ -58,6 +58,12 @@ Browser ←→ Next.js (App Router) ←→ PostgreSQL (Prisma)
 - **Socket.io**: Implementado para asegurar que los cambios en el tablero se reflejen instantáneamente para todos los miembros sin necesidad de refrescar.
 - **Zustand**: Gestión de estado ligera y eficiente para el tablero Kanban.
 - **Next.js 15**: Uso de las últimas capacidades del App Router para optimizar el rendimiento y SEO.
+- Credenciales de prueba:
+
+Email	     Contraseña	Rol
+admin@test.com	password123	Admin / Owner
+chris@test.com	password123	Scrum Master
+dev@test.com	password123	Developer
 
 ## 🗺️ Roadmap
 - [ ] Integración con GitHub Issues.
